@@ -8,10 +8,12 @@ import javax.swing.*;
 
 public class GUI2 extends Thread{
 	
-	
+  static JCheckBox srcbox = new JCheckBox("In source");
+  static JCheckBox dstbox = new JCheckBox("In destination");
   static JTextField filename = new JTextField(20);
   static JTextField vsys = new JTextField(20);
-  static JLabel statuslabel = new JLabel("<html>Status progres:<br/><br/><br/><br/><br/><br/><br/><br/></html>",JLabel.LEFT);		//status label
+  static JCheckBox disabledbox = new JCheckBox("Include disabled rules");
+  static JLabel statuslabel = new JLabel("<html>Status progress:<br/><br/><br/><br/><br/><br/><br/><br/></html>",JLabel.LEFT);		//status label
   static volatile String status;
  
 	
@@ -23,29 +25,38 @@ public class GUI2 extends Thread{
     JTextField ip = new JTextField(20);	
     ip.setText("192.168.1.10");
     vsys.setText("vsys1");
+    
 	filename.setText("candidate-config.xml");
 	
-	JLabel versionlabel = new JLabel("Version 0.8, Jaroslaw Jankun");
+	JLabel versionlabel = new JLabel("Version 0.91, Jaroslaw Jankun");
 	JButton helpbutton = new JButton("Click here for help");
-	JLabel infolabel = new JLabel("");
+
 	JLabel iplabel = new JLabel("Enter IP address(no subnet, just single address):");
+	
 	JLabel configlabel = new JLabel("Enter xml config filename (in the same folder):");
 	JLabel vsyslabel = new JLabel("Enter vsys number, for example 'vsys1' or 'all':");	
+	srcbox.setSelected(true);
+	dstbox.setSelected(true);
+	disabledbox.setSelected(true);
 	JButton button = new JButton("Process and save to file");
 	
 	box.add(versionlabel);
 	box.add(Box.createVerticalStrut(10));
 	box.add(helpbutton);   
 	box.add(Box.createVerticalStrut(10));
-	box.add(infolabel);
+
 	box.add(iplabel);
     box.add(ip);
+    box.add(srcbox);
+    box.add(dstbox);
     box.add(Box.createVerticalStrut(10));
     box.add(configlabel);
     box.add(filename);
     box.add(Box.createVerticalStrut(10));
     box.add(vsyslabel);
     box.add(vsys);
+    box.add(Box.createVerticalStrut(10));
+    box.add(disabledbox);
     box.add(Box.createVerticalStrut(10));
     box.add(button);
     box.add(Box.createVerticalStrut(30));
@@ -54,7 +65,7 @@ public class GUI2 extends Thread{
 
     
     frame.add(box, BorderLayout.CENTER);
-    frame.setSize(300, 450);
+    frame.setSize(300, 540);
     frame.setVisible(true);
   
     
@@ -63,7 +74,7 @@ public class GUI2 extends Thread{
     	    {
     	        public void actionPerformed(ActionEvent e)
     	        {
-    	         JOptionPane.showMessageDialog(null, "<html>You need to have Palo Alto xml config in the same folder.<br/><br/>Program will provide names of all objects, ranges, all groups<br/>(and all groups with these groups, all levels deep)<br/>and all rulenames and full rules, which contain the requested IP.<br/>It only ignores 'any' objects.<br/>If you select vsys 'all' and have duplicate rulenames,<br/>then first occurance is taken into consideration. <br><br></html>", "Help", JOptionPane.INFORMATION_MESSAGE);
+    	         JOptionPane.showMessageDialog(null, "<html>You need to have Palo Alto xml config in the same folder.<br/><br/>Program will provide names of all objects, ranges, all groups<br/>(and all groups with these groups, all levels deep)<br/>and all rulenames and full rules, which contain the requested IP.<br/>It only ignores 'any' objects.<br/>If you select vsys 'all' you may see duplicate rulenames,<br/>because it is possible in multiple vsys. <br><br></html>", "Help", JOptionPane.INFORMATION_MESSAGE);
     	        }
     	    });
     

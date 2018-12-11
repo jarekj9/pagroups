@@ -1,4 +1,4 @@
-//It finds all groups for specific IP - unfinished
+//Version 0.91 Jaroslaw Jankun
 import java.io.*;
 import java.nio.file.*;
 import java.nio.charset.*;
@@ -14,11 +14,16 @@ static String output="";											//output to file
 
 public static void START(String input) {
 	
+	String src_dst="all";														//this is for func RULES.RULENAMES_WITH_IP	
+	if(GUI2.srcbox.isSelected()) src_dst="source";								//check if we need rules with specific source or destination
+	if(GUI2.dstbox.isSelected()) src_dst="destination";
+	if( GUI2.dstbox.isSelected() && GUI2.srcbox.isSelected() ) src_dst="source or destination";
+	
 	lista.clear();
 	
 	GUI2.status+="<br/>Loading objects...";
 	FWOBJECTS.LOAD("<address>", "<address-group>", "</address>", "</address-group>",GUI2.vsys.getText());		//load part of config, where objects are
-	output+="Analysis for IP: "+input+" in vsys "+GUI2.vsys.getText()+"\r\n\r\n";	
+	output+="Analysis for IP: "+input+" as "+src_dst+" in vsys: "+GUI2.vsys.getText()+"\r\n\r\n";	
 	
 	GUI2.status+="<br/>Finding object names with IP you asked for...";
 	output+="IP belongs to objects:\r\n"+FWOBJECTS.OBJECT_NAME(input)+"\r\n(count: "+FWOBJECTS.count+")\r\n\r\n";			//display objects
@@ -35,7 +40,7 @@ public static void START(String input) {
 	FWOBJECTS.LOAD("<rules>", "<rules>", "</rules>", "</rules>",GUI2.vsys.getText());							//load part of config, where rules are	
 	
 	GUI2.status+="<br/>Finding policies with previously found objects...";
-	output+="Rulenames, that include any of these objects:\r\n"+RULES.RULENAMES_WITH_IP(FWOBJECTS.ALL_OBJ_WITH_IP)+"\r\n";			//display rulenames
+	output+="Rulenames, that include any of these objects:\r\n"+RULES.RULENAMES_WITH_IP(FWOBJECTS.ALL_OBJ_WITH_IP,GUI2.disabledbox.isSelected(), src_dst)+"\r\n";	//display rulenames, argument is object name and checkbox state (to include/exclude disabled rules
 	output+="(count: "+RULES.count+")\r\n\r\n";
 	
 	output+="Rules:\r\n\r\n";																//display rules

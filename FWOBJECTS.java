@@ -1,3 +1,4 @@
+//This is the main part of program
 //loading objects from file, finding which belongs to which groups and adding them to lists
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,13 +31,15 @@ public class FWOBJECTS {
 			
 			while ((line = bufferedReader.readLine()) != null) {
 				
+				if(line.contains("<entry name=\"vsys")) MAIN.lista.add(line); 
+				
 				if (line.contains("<entry name=\"vsys") && !vsys.equals("all")) {						//'vsys' word in line sets 'out', because we perhaps went to next vsys, but for our specific vsys in argument it sets 'in'					
 					vsyscheck="out";															//for vsys=all, ignore these if's
 					if (line.contains("<entry name=\""+vsys+"\">")) vsyscheck="in";
 				}
 				if (line.contains("<shared>")) vsyscheck="in"; 
 				
-				if (line.contains(start1) || line.contains(start2)) section="in";	//jestesmy we wlasciwej sekcji
+				if (line.contains(start1) || line.contains(start2)) section="in";				//it is in right config section
 				if (line.contains(stop1)|| line.contains(stop2)) section="out";
 				if (section.equals("in") && vsyscheck.equals("in")) MAIN.lista.add(line);							//if in the right section, add to list	
 				
